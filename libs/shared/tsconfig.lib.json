@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/libs/shared",
+    "declaration": true,
+    "module": "commonjs",
+    "types": ["node"],
+    "target": "es2021",
+    "emitDecoratorMetadata": true,
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
