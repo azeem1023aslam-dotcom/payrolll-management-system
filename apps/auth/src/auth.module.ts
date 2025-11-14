@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RmqModule } from '../../../libs/shared/src/lib/rmq.module';
 import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -25,6 +26,11 @@ import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
         schema: signupSchema,
       },
     ]),
+    // jwt congiuration
+    JwtModule.register({
+      secret:process.env.JET_SECRET,
+      signOptions:{expiresIn:'1d'}
+    })
   ],
   controllers: [AuthController],
   providers: [AuthService],

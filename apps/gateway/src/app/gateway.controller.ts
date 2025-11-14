@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
+import { Body, Controller, Post } from '@nestjs/common';
+import { loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
 import { GatewayService } from './gateway.service';
 
 @Controller('auth')
@@ -11,8 +11,8 @@ export class GatewayController {
     return this.gatewayService.signup(body);
   }
 
-  @Get('login')
-  getLogin() {
-    return 'login successfully!';
+  @Post('login')
+  getLogin(@Body() body:loginDto) {
+    return this.gatewayService.login(body)
   }
 }

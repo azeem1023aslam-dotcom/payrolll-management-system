@@ -9,12 +9,11 @@ export class AuthController {
 
   @MessagePattern('auth.signup')
   async signup(data: signupDto) {
-    console.log('Signup request received', data);
     return this.authService.signup(data);
   }
 
-  @MessagePattern('login')
-  login(data: any) {
+  @MessagePattern('auth.signin')
+  async login(data: any) {
     return this.authService.login(data);
   }
 }

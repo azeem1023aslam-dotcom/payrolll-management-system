@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { SERVICES } from '@shared/constants';
-import { signupDto } from 'libs/shared/src/DTO/auth.dto';
+import { loginDto, signupDto } from 'libs/shared/src/DTO/auth.dto';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
@@ -11,6 +11,18 @@ async signup(body: signupDto) {
   try {
     const result = await firstValueFrom(
       this.authClient.send('auth.signup', body)
+    );
+    console.log('GATEWAY RESULT >>>', result);
+    return result;
+  } catch (error) {
+    console.error('GATEWAY ERROR >>>', error);
+    return { status: 'error', message: error.message || 'Internal server error' };
+  }
+}
+async login(body: loginDto) {
+  try {
+    const result = await firstValueFrom(
+      this.authClient.send('auth.signin', body)
     );
     console.log('GATEWAY RESULT >>>', result);
     return result;

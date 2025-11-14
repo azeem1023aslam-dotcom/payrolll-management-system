@@ -13,3 +13,11 @@ export class signupDto{
     @ApiProperty({example:'employee'})
     role:string
 }
+
+export class loginDto {
+    @ApiProperty({example:'azeem@gmail.com'})
+    email:string
+
+    @ApiProperty({example:'123'})
+    password:string
+}

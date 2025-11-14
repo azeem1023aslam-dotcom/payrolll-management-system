@@ -1,31 +1,67 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { signupDto } from 'libs/shared/src/DTO/auth.dto';
 import { signup } from './../../../../libs/shared/src/schema/auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { loginDto } from '../../../../libs/shared/src/DTO/auth.dto';
+import { NotFoundError } from 'rxjs';
+import { JwtService } from '@nestjs/jwt';
+import { isRegExp } from 'util/types';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(signup.name) private authModal: Model<signup>) {}
+  constructor(
+    @InjectModel(signup.name) private authModal: Model<signup>,
+    private jwtService: JwtService
+  ) {}
 
   async signup(data: signupDto) {
-  console.log('Received signup', data);
+    const haveUser = await this.authModal.findOne({ email: data.email });
+    if (haveUser) {
+      return { status: 'error', message: 'Email already exists' };
+    }
 
-  const haveUser = await this.authModal.findOne({ email: data.email });
-  if (haveUser) {
-    return { status: 'error', message: 'Email already exists' };
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const payload = { ...data, password: hashedPassword };
+    const result = await this.authModal.create(payload);
+
+    return {
+      status: 'success',
+      message: 'Signup successfully',
+      data: result,
+    };
   }
 
-  const hashedPassword = await bcrypt.hash(data.password, 10);
+  async login(data: loginDto) {
+    const isRegisteredUser = await this.authModal.findOne({
+      email: data?.email,
+    });
+    if (!isRegisteredUser) {
+      throw new NotFoundException('Email or Password is incorrect');
+    }
+    const isCorrectPassword = await bcrypt.compare(
+      data.password,
+      isRegisteredUser.password
+    );
+    if (!isCorrectPassword) {
+      throw new NotFoundException('Email or Password is incorrect');
+    }
+    const payload = {
+      id: isRegisteredUser?._id,
+      email: isRegisteredUser?.email,
+      role: isRegisteredUser?.role,
+    };
 
-  const payload = { ...data, password: hashedPassword };
-  await this.authModal.create(payload);
-
-  return { status: 'success', message: 'Signup successfully' };
-}
-
-  login(data: any) {
-    return { message: `Hello login api ${data}` };
+    const token = this.jwtService.signAsync(payload, {
+      expiresIn: '1d',
+    });
+    return {
+      sttaus:'success',
+      message:'get access token successfully',
+      accessToken:token,
+      data:isRegisteredUser
+    }
   }
 }
