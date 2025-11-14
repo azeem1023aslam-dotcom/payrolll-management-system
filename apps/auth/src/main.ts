@@ -5,19 +5,21 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AuthModule } from './auth.module';
 import { Transport } from '@nestjs/microservices';
 import { SERVICES } from '@shared/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(AppModule,
+  const app = await NestFactory.createMicroservice(AuthModule,
     {
       transport: Transport.RMQ,
       options: {
         urls: [process.env.RMQ_URI],
-        queue: process.env[`RMQ_${SERVICES.AUTH}_QUEUE`],
+        // queue: process.env[`RMQ_${SERVICES.AUTH}_QUEUE`],
+        // queue: process.env.RMQ_AUTH_QUEUE,
+        queue: 'AUTH',
         queueOptions: {
-          durable: false
+          durable: true
         },
       },
     }
