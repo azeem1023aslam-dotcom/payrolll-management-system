@@ -27,6 +27,32 @@ services:
     depends_on:
       - rabbitmq
 
+  employee:
+    container_name: employee
+    build:
+      context: ./
+      dockerfile: Dockerfile.employee
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+
+  leaves:
+    container_name: leaves
+    build:
+      context: ./
+      dockerfile: Dockerfile.leaves
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+
   rabbitmq:   # ✅ now inside services
     image: rabbitmq:3.12-management-alpine
     container_name: rabbitmq

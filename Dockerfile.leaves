@@ -1,0 +1,9 @@
+FROM node:20-alpine
+ 
+RUN mkdir -p /var/www/leaves
+WORKDIR /var/www/leaves
+ADD . /var/www/leaves
+RUN npm install -f
+RUN npx nx build leaves
+EXPOSE 8000
+CMD ["node", "./dist/apps/leaves/main.js"]
