@@ -35,9 +35,11 @@ export class AuthService {
   }
 
   async login(data: loginDto) {
+    
     const isRegisteredUser = await this.authModal.findOne({
       email: data?.email,
     });
+    console.log('LOGIN DATA >>>', isRegisteredUser);
     if (!isRegisteredUser) {
       throw new NotFoundException('Email or Password is incorrect');
     }
@@ -54,13 +56,11 @@ export class AuthService {
       role: isRegisteredUser?.role,
     };
 
-    const token = this.jwtService.signAsync(payload, {
-      expiresIn: '1d',
-    });
+    // const token = await this.jwtService.signAsync(payload);
     return {
       sttaus:'success',
       message:'get access token successfully',
-      accessToken:token,
+      // accessToken:token,
       data:isRegisteredUser
     }
   }

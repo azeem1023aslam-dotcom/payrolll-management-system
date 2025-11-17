@@ -4,14 +4,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({})
 export class RmqModule {
-  static registerAsync(queue: string): DynamicModule {
+  static registerMultipleAsync(queues: string[]): DynamicModule {
     return {
       module: RmqModule,
       imports: [
-        ConfigModule, // ensure env available
-
-        ClientsModule.registerAsync([
-          {
+        ConfigModule,
+        ClientsModule.registerAsync(
+          queues.map((queue) => ({
             name: queue,
             inject: [ConfigService],
             useFactory: (config: ConfigService) => ({
@@ -22,8 +21,8 @@ export class RmqModule {
                 queueOptions: { durable: true },
               },
             }),
-          },
-        ]),
+          }))
+        ),
       ],
       exports: [ClientsModule],
     };

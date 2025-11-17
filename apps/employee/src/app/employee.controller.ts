@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
-  @Get()
-  getData() {
-    return this.employeeService.getData();
+  @MessagePattern('employee.create')
+  async createEmployee() {
+    return 'comment';
   }
 }

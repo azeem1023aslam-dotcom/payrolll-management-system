@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RmqModule } from '../../../libs/shared/src/lib/rmq.module';
 import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
+import { SERVICES } from '@shared/constants';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       inject: [ConfigService],
     }),
-    RmqModule.registerAsync('AUTH'),
+    RmqModule.registerMultipleAsync([SERVICES.AUTH]),
     MongooseModule.forFeature([
       {
         name: signup.name,
@@ -27,10 +28,16 @@ import { JwtModule } from '@nestjs/jwt';
       },
     ]),
     // jwt congiuration
-    JwtModule.register({
-      secret:process.env.JET_SECRET,
-      signOptions:{expiresIn:'1d'}
-    })
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: config.get('1d'),
+        },
+      }),
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

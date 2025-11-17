@@ -15,9 +15,7 @@ async function bootstrap() {
       transport: Transport.RMQ,
       options: {
         urls: [process.env.RMQ_URI],
-        // queue: process.env[`RMQ_${SERVICES.AUTH}_QUEUE`],
-        // queue: process.env.RMQ_AUTH_QUEUE,
-        queue: 'AUTH',
+        queue: SERVICES.AUTH,
         queueOptions: {
           durable: true
         },

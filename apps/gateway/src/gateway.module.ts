@@ -3,13 +3,12 @@ import { GatewayController } from './app/gateway.controller';
 import { GatewayService } from './app/gateway.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SERVICES } from '@shared/constants';
 import { RmqModule } from './../../../libs/shared/src/lib/rmq.module';
 
 @Module({
   imports: [
-  ConfigModule.forRoot({
+    ConfigModule.forRoot({
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
@@ -19,7 +18,11 @@ import { RmqModule } from './../../../libs/shared/src/lib/rmq.module';
       }),
       inject: [ConfigService],
     }),
-    RmqModule.registerAsync('AUTH'),
+    RmqModule.registerMultipleAsync([
+      SERVICES.AUTH,
+      SERVICES.EMPLOYEE,
+      SERVICES.LEAVES,
+    ]),
   ],
   controllers: [GatewayController],
   providers: [GatewayService],

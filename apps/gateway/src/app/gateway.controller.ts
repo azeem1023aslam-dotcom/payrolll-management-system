@@ -11,8 +11,8 @@ export class GatewayController {
     return this.gatewayService.signup(body);
   }
 
-  @Post('login')
-  getLogin(@Body() body:loginDto) {
+  @Post('signin')
+  login(@Body() body:loginDto) {
     return this.gatewayService.login(body)
   }
 }

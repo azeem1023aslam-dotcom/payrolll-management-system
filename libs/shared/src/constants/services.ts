@@ -1,3 +1,5 @@
 export enum SERVICES {
-  AUTH= 'AUTH',
-};
+  AUTH = 'AUTH',
+  EMPLOYEE = 'EMPLOYEE',
+  LEAVES = 'LEAVES',
+}

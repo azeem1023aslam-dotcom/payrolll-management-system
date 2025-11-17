@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
+import { loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
 
 @Controller()
 export class AuthController {
@@ -13,7 +13,7 @@ export class AuthController {
   }
 
   @MessagePattern('auth.signin')
-  async login(data: any) {
+  async login(data: loginDto) {
     return this.authService.login(data);
   }
 }

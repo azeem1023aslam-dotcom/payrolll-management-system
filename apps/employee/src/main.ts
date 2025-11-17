@@ -5,17 +5,25 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app/employee.module';
+import { EmployeeModule } from './employee.module';
+import { Transport } from '@nestjs/microservices';
+import { SERVICES } from '@shared/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+  const app = await NestFactory.createMicroservice(EmployeeModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: [process.env.RMQ_URI],
+        queue: SERVICES.EMPLOYEE,
+        queueOptions: {
+          durable: true
+        },
+      },
+    }
   );
+  await app.listen();
+  Logger.log(`🚀 Application is running`);
 }
 
 bootstrap();
