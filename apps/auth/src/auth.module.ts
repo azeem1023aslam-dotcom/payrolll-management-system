@@ -1,4 +1,4 @@
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@shared';
 import { Module } from '@nestjs/common';
 import { AuthController } from './app/auth.controller';
 import { AuthService } from './app/auth.service';
@@ -7,7 +7,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RmqModule } from '../../../libs/shared/src/lib/rmq.module';
 import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
-import { SERVICES } from '@shared/constants';
+import { SERVICES } from '@shared';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './app/role-based-authorization/roles.guard';
+
 @Module({
   imports: [
     SharedModule,
@@ -31,6 +34,12 @@ import { SERVICES } from '@shared/constants';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AuthModule {}

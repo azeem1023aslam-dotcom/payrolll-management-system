@@ -26,3 +26,14 @@ export class forgetPasswordDto {
     @ApiProperty({example:'azeem@gmail.com'})
     email:string
 }
+
+export class resetPasswordDto {
+    @ApiProperty({example:'...................'})
+    token:string
+
+    @ApiProperty({example:'123'})
+    password:string
+
+    @ApiProperty({example:'123'})
+    confirmPassword:string
+}

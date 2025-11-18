@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { forgetPasswordDto, loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
+import { forgetPasswordDto, loginDto, resetPasswordDto, signupDto } from '@shared';
+import { Roles } from './role-based-authorization/roles.decorator';
 
 @Controller()
 export class AuthController {
@@ -20,5 +21,11 @@ export class AuthController {
   @MessagePattern('auth.forgetPassword')
   async forgetPassword(data: forgetPasswordDto) {
     return this.authService.forgetPassword(data);
+  }
+
+  // @UseGuards()
+  @MessagePattern('auth.resetPassword')
+  async resetPassword(data: resetPasswordDto) {
+    return this.authService.resetPassword(data);
   }
 }
