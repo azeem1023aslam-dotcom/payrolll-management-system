@@ -1,9 +1,18 @@
-FROM node:20-alpine
- 
-RUN mkdir -p /var/www/auth
+FROM node:18-slim
+
 WORKDIR /var/www/auth
-ADD . /var/www/auth
-RUN npm install -f
+
+# Copy only needed root files
+COPY package.json package-lock.json nx.json tsconfig.base.json ./
+
+# Copy only auth app
+COPY apps/auth ./apps/auth
+
+# Install deps
+RUN npm install
+
+# Build only auth
 RUN npx nx build auth
+
 EXPOSE 8000
-CMD ["node", "./dist/apps/auth/main.js"]
+CMD ["node", "dist/apps/auth/main.js"]

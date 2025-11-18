@@ -1,0 +1,7 @@
+node_modules
+dist
+.git
+.gitignore
+tmp
+**/node_modules
+**/dist
