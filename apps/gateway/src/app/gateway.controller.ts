@@ -1,7 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
 import { GatewayService } from './gateway.service';
-
 @Controller('auth')
 export class GatewayController {
   constructor(private readonly gatewayService:GatewayService) {}

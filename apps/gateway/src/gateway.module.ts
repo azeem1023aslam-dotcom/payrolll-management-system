@@ -1,23 +1,12 @@
 import { Module } from '@nestjs/common';
 import { GatewayController } from './app/gateway.controller';
 import { GatewayService } from './app/gateway.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SERVICES } from '@shared/constants';
-import { RmqModule } from './../../../libs/shared/src/lib/rmq.module';
-
+import { RmqModule } from '@shared/rmq.module';
+import { SharedModule } from '@shared/shared.module';
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    MongooseModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get('MONGO_URI'),
-        dbName: configService.get('MONGO_DATABASE'),
-      }),
-      inject: [ConfigService],
-    }),
+    SharedModule,
     RmqModule.registerMultipleAsync([
       SERVICES.AUTH,
       SERVICES.EMPLOYEE,

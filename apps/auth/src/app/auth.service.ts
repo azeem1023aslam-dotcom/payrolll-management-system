@@ -5,9 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { loginDto } from '../../../../libs/shared/src/DTO/auth.dto';
-import { NotFoundError } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
-import { isRegExp } from 'util/types';
 
 @Injectable()
 export class AuthService {
@@ -21,9 +19,7 @@ export class AuthService {
     if (haveUser) {
       return { status: 'error', message: 'Email already exists' };
     }
-
     const hashedPassword = await bcrypt.hash(data.password, 10);
-
     const payload = { ...data, password: hashedPassword };
     const result = await this.authModal.create(payload);
 
@@ -35,20 +31,16 @@ export class AuthService {
   }
 
   async login(data: loginDto) {
-    
-    const isRegisteredUser = await this.authModal.findOne({
-      email: data?.email,
-    });
-    console.log('LOGIN DATA >>>', isRegisteredUser);
+    const isRegisteredUser = await this.authModal.findOne({email: data?.email });
     if (!isRegisteredUser) {
-      throw new NotFoundException('Email or Password is incorrect');
+      throw new NotFoundException('Email or password is incorrect');
     }
     const isCorrectPassword = await bcrypt.compare(
       data.password,
       isRegisteredUser.password
     );
     if (!isCorrectPassword) {
-      throw new NotFoundException('Email or Password is incorrect');
+      throw new NotFoundException('Email or password is incorrect');
     }
     const payload = {
       id: isRegisteredUser?._id,
@@ -56,11 +48,11 @@ export class AuthService {
       role: isRegisteredUser?.role,
     };
 
-    // const token = await this.jwtService.signAsync(payload);
+    const token = this.jwtService.sign(payload);
     return {
       sttaus:'success',
       message:'get access token successfully',
-      // accessToken:token,
+      accessToken:token,
       data:isRegisteredUser
     }
   }
