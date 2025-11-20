@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { signupDto } from 'libs/shared/src/DTO/auth.dto';
+import { RpcException } from '@nestjs/microservices';
+import { forgetPasswordDto, signupDto } from 'libs/shared/src/DTO/auth.dto';
 import { signup } from './../../../../libs/shared/src/schema/auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { loginDto } from '../../../../libs/shared/src/DTO/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -14,6 +14,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
+  //signup function
   async signup(data: signupDto) {
     const haveUser = await this.authModal.findOne({ email: data.email });
     if (haveUser) {
@@ -30,6 +31,7 @@ export class AuthService {
     };
   }
 
+  // login function
   async login(data: loginDto) {
     const isRegisteredUser = await this.authModal.findOne({email: data?.email });
     if (!isRegisteredUser) {
@@ -54,6 +56,23 @@ export class AuthService {
       message:'get access token successfully',
       accessToken:token,
       data:isRegisteredUser
+    }
+  }
+
+  // forgot password function
+  async forgetPassword (data: forgetPasswordDto) {
+    const isRegisteredUser = await this.authModal.findOne({email: data?.email });
+    if(!isRegisteredUser) {
+      throw new RpcException({
+        status: 404,
+        message: 'Email not found'
+      });
+    }
+    const token = this.jwtService.sign({email: isRegisteredUser?.email});
+    return {
+      status: 'success',
+      message: 'Password reset email sent',
+      data: token
     }
   }
 }

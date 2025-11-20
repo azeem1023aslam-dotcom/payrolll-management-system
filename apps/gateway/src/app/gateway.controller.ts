@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
+import { forgetPasswordDto, loginDto, signupDto } from './../../../../libs/shared/src/DTO/auth.dto';
 import { GatewayService } from './gateway.service';
 @Controller('auth')
 export class GatewayController {
@@ -14,4 +14,10 @@ export class GatewayController {
   login(@Body() body:loginDto) {
     return this.gatewayService.login(body)
   }
+
+  @Post('forget-password')
+  forgetPassword(@Body() body: forgetPasswordDto) {
+    return this.gatewayService.forgetPassword(body);
+  }
+
 }

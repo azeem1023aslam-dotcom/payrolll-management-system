@@ -21,3 +21,8 @@ export class loginDto {
     @ApiProperty({example:'123'})
     password:string
 }
+
+export class forgetPasswordDto {
+    @ApiProperty({example:'azeem@gmail.com'})
+    email:string
+}
