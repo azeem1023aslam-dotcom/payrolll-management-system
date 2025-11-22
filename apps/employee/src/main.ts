@@ -1,16 +1,16 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AuthModule } from './auth.module';
+import { EmployeeModule } from './employee.module';
 import { Transport } from '@nestjs/microservices';
 import { SERVICES } from '@shared';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(AuthModule,
+  const app = await NestFactory.createMicroservice(EmployeeModule,
     {
       transport: Transport.RMQ,
       options: {
         urls: [process.env.RMQ_URI],
-        queue: SERVICES.AUTH,
+        queue: SERVICES.EMPLOYEE,
         queueOptions: {
           durable: true
         },

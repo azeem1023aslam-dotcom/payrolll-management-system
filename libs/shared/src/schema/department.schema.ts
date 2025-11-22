@@ -1,0 +1,12 @@
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+
+@Schema({timestamps:true})
+export class Department extends Document {
+  @Prop({ required: true, unique: true })
+  name: string;
+
+  @Prop()
+  description: string;
+}
+
+export const departmentSchema = SchemaFactory.createForClass(Department)

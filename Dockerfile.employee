@@ -1,0 +1,18 @@
+FROM node:18-slim
+
+WORKDIR /var/www/employee
+
+# Copy only needed root files
+COPY package.json package-lock.json nx.json tsconfig.base.json ./
+
+# Copy only employee app
+COPY apps/employee ./apps/employee
+
+# Install deps
+RUN npm install
+
+# Build only employee
+RUN npx nx build employee
+
+EXPOSE 8000
+CMD ["node", "dist/apps/employee/main.js"]
