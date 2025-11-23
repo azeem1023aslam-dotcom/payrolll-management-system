@@ -1,0 +1,17 @@
+FROM node:18-slim
+WORKDIR /var/www/gateway
+
+# Copy only needed root files
+COPY package.json package-lock.json nx.json tsconfig.base.json ./
+
+# Copy only GATEWAY app
+COPY apps/gateway ./apps/gateway
+
+# Install deps
+RUN npm install
+
+# Build only gateway
+RUN npx nx build gateway
+
+EXPOSE 8000
+CMD ["node", "dist/apps/gateway/main.js"]
