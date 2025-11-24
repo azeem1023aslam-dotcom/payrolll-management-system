@@ -1,19 +1,19 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import {
   forgetPasswordDto,
   loginDto,
   resetPasswordDto,
   signupDto,
 } from '@shared';
-import { GatewayService } from './gateway.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Roles } from './../../../auth/src/app/role-based-authorization/roles.decorator';
-import { RolesGuard } from './../../../auth/src/app/role-based-authorization/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from './../../../../auth/src/app/role-based-authorization/roles.decorator';
+import { AuthGatewayService } from '../services/auth.service';
 
+@ApiTags('Auth')
 @ApiBearerAuth()
 @Controller('auth')
-export class GatewayController {
-  constructor(private readonly gatewayService: GatewayService) {}
+export class AuthGatewayController {
+  constructor(private readonly gatewayService: AuthGatewayService) {}
 
   @Post('signup')
   signup(@Body() body: signupDto) {
@@ -25,7 +25,6 @@ export class GatewayController {
     return this.gatewayService.login(body);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Post('forget-password')
   forgetPassword(@Body() body: forgetPasswordDto) {

@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { GatewayController } from './app/gateway.controller';
-import { GatewayService } from './app/gateway.service';
-import { SERVICES,SharedModule,RmqModule } from '@shared';
+import { SERVICES, SharedModule, RmqModule } from '@shared';
+import {
+  AuthGatewayController,
+  EmployeeGatewayController,
+} from './app/controllers';
+import { AuthGatewayService, EmployeeGatewayService } from './app/services';
 
 @Module({
   imports: [
@@ -12,7 +15,7 @@ import { SERVICES,SharedModule,RmqModule } from '@shared';
       SERVICES.LEAVES,
     ]),
   ],
-  controllers: [GatewayController],
-  providers: [GatewayService],
+  controllers: [AuthGatewayController, EmployeeGatewayController],
+  providers: [AuthGatewayService, EmployeeGatewayService],
 })
-export class AppModule {}
+export class GatewayModule {}

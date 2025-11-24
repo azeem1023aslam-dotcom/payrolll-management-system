@@ -5,11 +5,9 @@ import { forgetPasswordDto, loginDto, signupDto } from '@shared';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class GatewayService {
+export class AuthGatewayService {
   constructor(
     @Inject(SERVICES.AUTH) private authClient: ClientProxy,
-    @Inject(SERVICES.EMPLOYEE) private employeeClient: ClientProxy,
-    @Inject(SERVICES.LEAVES) private leavesClient: ClientProxy,
   ) {}
 
   async signup(body: signupDto) {
@@ -63,5 +61,4 @@ export class GatewayService {
       return { status: 'error', message: error.message || 'Internal server error' };
     }
   }
-
 }
