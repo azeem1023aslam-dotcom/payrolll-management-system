@@ -23,7 +23,7 @@ export class EmployeeController {
   }
 
   @MessagePattern('employee.update')
-  async updateEmpById(id: string, body: CreateEmployeeDto) {
-    return this.empService.updateEmployee(id, body);
+  async updateEmpById(data: { id: string; body: CreateEmployeeDto }) {
+    return this.empService.updateEmployee(data.id, data.body);
   }
 }

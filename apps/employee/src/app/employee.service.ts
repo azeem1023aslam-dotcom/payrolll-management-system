@@ -31,7 +31,7 @@ export class EmployeeService {
   }
 
   async updateEmployee(id: string, body: CreateEmployeeDto) {
-    const isEmployee = await this.empModal.findOne({ _id: id });
+    const isEmployee = await this.empModal.findById(id);
     if (!isEmployee) {
       throw new RpcException({
         status: 404,
@@ -39,19 +39,28 @@ export class EmployeeService {
       });
     }
 
-    const editData = await this.empModal.findByIdAndUpdate({
-      _id: id,
-      body,
+    if (body.email && body.email !== isEmployee.email) {
+      const emailExists = await this.empModal.findOne({ email: body.email });
+      if (emailExists) {
+        throw new RpcException({
+          status: 404,
+          message: 'Email already exists!',
+        });
+      }
+    }
+
+    const editData = await this.empModal.findByIdAndUpdate(id, body, {
       new: true,
     });
     return {
+      status: 200,
       message: 'Employee updated successfully!',
       data: editData,
     };
   }
 
   async deleteEmpById(id: string) {
-    const emp = await this.empModal.findByIdAndDelete({ _id: id });
+    const emp = await this.empModal.findByIdAndDelete(id);
     return {
       message: 'Employee deleted successfully',
       data: emp,

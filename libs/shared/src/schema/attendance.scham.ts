@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 @Schema({timestamps:true})
-export class Attendance {
+export class Attendance extends Document {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Employee' })
   employee: string;
 

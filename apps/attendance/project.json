@@ -1,0 +1,75 @@
+{
+  "name": "attendance",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/attendance/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/attendance",
+        "main": "apps/attendance/src/main.ts",
+        "tsConfig": "apps/attendance/tsconfig.app.json",
+        "assets": ["apps/attendance/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/attendance/webpack.config.js",
+        "generatePackageJson": false
+      },
+      "configurations": {
+        "development": {
+          "generatePackageJson": false
+        },
+        "production": {
+          "generatePackageJson": true
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/dist/apps/attendance/package.json",
+        "{workspaceRoot}/dist/apps/attendance/pnpm-lock.yaml"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/apps/attendance/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "attendance:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "attendance:build:development"
+        },
+        "production": {
+          "buildTarget": "attendance:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}
