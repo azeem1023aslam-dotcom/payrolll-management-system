@@ -1,9 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { SERVICES } from '@shared';
+import { SERVICES, CreateEmployeeDto, updateEmployeeDto } from '@shared';
 import { firstValueFrom } from 'rxjs';
-import { CreateEmployeeDto } from './../../../../../libs/shared/src/DTO/employee.dto';
-
 @Injectable()
 export class EmployeeGatewayService {
   constructor(@Inject(SERVICES.EMPLOYEE) private employeeClient: ClientProxy) {}
@@ -36,7 +34,7 @@ export class EmployeeGatewayService {
     }
   }
 
-  async updateEmployee(id:string,body:CreateEmployeeDto) {
+  async updateEmployee(id:string,body:updateEmployeeDto) {
     try {
       const result = await firstValueFrom(
         this.employeeClient.send('employee.update', {id,body})

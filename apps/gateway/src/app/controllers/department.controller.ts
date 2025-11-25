@@ -8,9 +8,8 @@ import {
     Post,
   } from '@nestjs/common';
   import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-  import { CreateEmployeeDto } from 'libs/shared/src/DTO/employee.dto';
 import { DepartmentGatewayService } from '../services/department.service';
-import { CreateDepartmentDto } from 'libs/shared/src/DTO/department.dto';
+import { CreateDepartmentDto, updateDepartmentDto } from '@shared';
   
   @ApiTags('Department')
   @ApiBearerAuth()
@@ -31,7 +30,7 @@ import { CreateDepartmentDto } from 'libs/shared/src/DTO/department.dto';
     }
   
     @Patch(':id')
-    updateDepartment(@Param('id') id: string, @Body() body: CreateDepartmentDto) {
+    updateDepartment(@Param('id') id: string, @Body() body: updateDepartmentDto) {
       return this.departmentGatewayService.updateDepartment(id, body);
     }
   

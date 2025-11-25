@@ -1,4 +1,4 @@
-import { CreateDepartmentDto } from './../../../../../libs/shared/src/DTO/department.dto';
+import { CreateDepartmentDto,updateDepartmentDto } from '@shared';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { SERVICES } from '@shared';
@@ -36,7 +36,7 @@ export class DepartmentGatewayService {
     }
   }
 
-  async updateDepartment(id:string,body:CreateDepartmentDto) {
+  async updateDepartment(id:string,body:updateDepartmentDto) {
     try {
       const result = await firstValueFrom(
         this.departmentClient.send('department.update', {id,body})

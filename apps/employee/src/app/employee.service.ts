@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Employee } from './../../../../libs/shared/src/schema/employee.schema';
-import { CreateEmployeeDto } from './../../../../libs/shared/src/DTO/employee.dto';
+import { Employee, CreateEmployeeDto, updateEmployeeDto } from '@shared';
 import { RpcException } from '@nestjs/microservices';
-
 @Injectable()
 export class EmployeeService {
   constructor(@InjectModel(Employee.name) private empModal: Model<Employee>) {}
@@ -30,7 +28,7 @@ export class EmployeeService {
     return this.empModal.find();
   }
 
-  async updateEmployee(id: string, body: CreateEmployeeDto) {
+  async updateEmployee(id: string, body: updateEmployeeDto) {
     const isEmployee = await this.empModal.findById(id);
     if (!isEmployee) {
       throw new RpcException({

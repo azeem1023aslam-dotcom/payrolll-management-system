@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { EmployeeGatewayService } from '../services/employee.service';
-import { CreateEmployeeDto } from 'libs/shared/src/DTO/employee.dto';
+import { CreateEmployeeDto, updateEmployeeDto } from '@shared';
 
 @ApiTags('Employee')
 @ApiBearerAuth()
@@ -30,7 +30,7 @@ export class EmployeeGatewayController {
   }
 
   @Patch(':id')
-  updateEmp(@Param('id') id: string, @Body() body: CreateEmployeeDto) {
+  updateEmp(@Param('id') id: string, @Body() body: updateEmployeeDto) {
     return this.employeeGatewayService.updateEmployee(id, body);
   }
 

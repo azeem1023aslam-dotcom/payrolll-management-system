@@ -1,13 +1,14 @@
-import { Department } from './../../../../libs/shared/src/schema/department.schema';
+import { Department, CreateDepartmentDto } from '@shared';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { RpcException } from '@nestjs/microservices';
-import { CreateDepartmentDto } from 'libs/shared/src/DTO/department.dto';
 
 @Injectable()
 export class DepartmentService {
-  constructor(@InjectModel(Department.name) private depModal: Model<Department>) {}
+  constructor(
+    @InjectModel(Department.name) private depModal: Model<Department>
+  ) {}
 
   async createDepartment(body: CreateDepartmentDto) {
     const isExist = await this.depModal.findOne({ name: body.name });

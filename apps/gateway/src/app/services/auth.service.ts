@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { resetPasswordDto, SERVICES } from '@shared';
-import { forgetPasswordDto, loginDto, signupDto } from '@shared';
+import { resetPasswordDto, SERVICES, forgetPasswordDto, loginDto, signupDto } from '@shared';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()

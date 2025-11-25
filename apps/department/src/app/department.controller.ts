@@ -1,4 +1,4 @@
-import { CreateDepartmentDto } from './../../../../libs/shared/src/DTO/department.dto';
+import { CreateDepartmentDto } from '@shared';
 import { Controller } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { MessagePattern } from '@nestjs/microservices';

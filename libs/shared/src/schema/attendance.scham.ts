@@ -4,7 +4,7 @@ import mongoose, { Document } from "mongoose";
 @Schema({timestamps:true})
 export class Attendance extends Document {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Employee' })
-  employee: string;
+  employeeId: mongoose.Types.ObjectId;
 
   @Prop()
   checkIn: string;
@@ -16,4 +16,3 @@ export class Attendance extends Document {
   status: 'present' | 'absent' | 'leave';
 }
 export const attendanceSchema = SchemaFactory.createForClass(Attendance)
-

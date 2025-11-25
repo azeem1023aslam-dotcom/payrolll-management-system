@@ -8,7 +8,7 @@ import {
   IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateEmployeeDto {
   @IsString()
@@ -58,3 +58,5 @@ export class CreateEmployeeDto {
   @ApiProperty({example:true})
   status?: true
 }
+
+export class updateEmployeeDto extends PartialType(CreateEmployeeDto) {}

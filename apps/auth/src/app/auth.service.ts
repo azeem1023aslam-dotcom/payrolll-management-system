@@ -1,7 +1,5 @@
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
+  Injectable
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
@@ -15,7 +13,6 @@ import {
   signup,
   resetPasswordDto,
 } from '@shared';
-import { stat } from 'fs';
 
 @Injectable()
 export class AuthService {

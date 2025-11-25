@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
-import { CreateEmployeeDto } from './../../../../libs/shared/src/DTO/employee.dto';
+import { CreateEmployeeDto, updateEmployeeDto } from '@shared';
 import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
@@ -23,7 +23,7 @@ export class EmployeeController {
   }
 
   @MessagePattern('employee.update')
-  async updateEmpById(data: { id: string; body: CreateEmployeeDto }) {
+  async updateEmpById(data: { id: string; body: updateEmployeeDto }) {
     return this.empService.updateEmployee(data.id, data.body);
   }
 }

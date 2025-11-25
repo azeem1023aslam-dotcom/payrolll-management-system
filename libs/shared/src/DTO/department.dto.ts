@@ -2,7 +2,7 @@ import {
     IsString,
     IsOptional,
   } from 'class-validator';
-  import { ApiProperty } from '@nestjs/swagger';
+  import { ApiProperty, PartialType } from '@nestjs/swagger';
   
   export class CreateDepartmentDto {
     @IsString()
@@ -13,3 +13,5 @@ import {
     @ApiProperty({example:'Development Department'})
     description?: string;
   }
+
+  export class updateDepartmentDto extends PartialType(CreateDepartmentDto) {}
