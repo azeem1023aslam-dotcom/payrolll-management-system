@@ -23,6 +23,7 @@ export class loginDto {
     @ApiProperty({example:'azeem@gmail.com'})
     email:string
 
+    @MinLength(6)
     @ApiProperty({example:'123'})
     password:string
 }
