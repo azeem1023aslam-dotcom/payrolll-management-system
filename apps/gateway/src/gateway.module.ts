@@ -1,3 +1,5 @@
+import { AuthStrategy } from './../../auth/src/app/role-based-authorization/auth.strategy';
+import { RoleBaseGuardsGuard } from './../../auth/src/app/role-based-authorization/roles.guard';
 import { Module } from '@nestjs/common';
 import { SERVICES, SharedModule, RmqModule } from '@shared';
 import {
@@ -14,6 +16,7 @@ import {
 } from './app/services';
 import { AttendanceGatewayController } from './app/controllers/attendance.controller';
 import { AttendanceGatewayService } from './app/services/attendance.service';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -34,6 +37,11 @@ import { AttendanceGatewayService } from './app/services/attendance.service';
     LeavesGatewayController,
   ],
   providers: [
+    AuthStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: RoleBaseGuardsGuard,
+    },
     AuthGatewayService,
     EmployeeGatewayService,
     DepartmentGatewayService,

@@ -1,34 +1,33 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { ROLES_KEY } from './roles.decorator';
-import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
-  canActivate(context: ExecutionContext): any {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()]
-    );
+export class RoleBaseGuardsGuard implements CanActivate {
+  constructor(private reflector: Reflector, private jwtService: JwtService) {}
+  canActivate(
+    context: ExecutionContext,
+  ): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
     if (!requiredRoles) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
-    const user = request.user;
-    if (!user) {
-      throw new RpcException({
-        status: 404,
-        message: 'user not found in request',
-      });
+    const authHeader = request.headers['authorization'];
+
+    if (!authHeader) {
+      throw new UnauthorizedException('Jwt token missing!');
     }
-    if (!requiredRoles.includes(user.role)) {
-      throw new RpcException({
-        status: 503,
-        message: 'Access denied: insufficient role',
-      });
-    }
-    return true;
+
+    const token = authHeader.split(' ')[1];
+    const decoded = this.jwtService.verify(token);
+
+    return requiredRoles.some((role) => decoded.role === role);
   }
 }
