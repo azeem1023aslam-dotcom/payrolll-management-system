@@ -1,3 +1,4 @@
+import { AuthModule } from './../../auth/src/auth.module';
 import { AuthStrategy } from './../../auth/src/app/role-based-authorization/auth.strategy';
 import { RoleBaseGuardsGuard } from './../../auth/src/app/role-based-authorization/roles.guard';
 import { Module } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     SharedModule,
+    AuthModule,
     RmqModule.registerMultipleAsync([
       SERVICES.AUTH,
       SERVICES.EMPLOYEE,

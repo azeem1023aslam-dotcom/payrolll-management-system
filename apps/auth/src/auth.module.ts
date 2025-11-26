@@ -9,7 +9,7 @@ import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { SERVICES } from '@shared';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './app/role-based-authorization/roles.guard';
+// import { RoleBaseGuardsGuard } from './app/role-based-authorization/roles.guard';
 
 @Module({
   imports: [
@@ -34,12 +34,13 @@ import { RolesGuard } from './app/role-based-authorization/roles.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  exports:[JwtModule]
+  // providers: [
+  //   AuthService,
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: RoleBaseGuardsGuard,
+  //   },
+  // ],
 })
 export class AuthModule {}
