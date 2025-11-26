@@ -1,14 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Employee, CreateEmployeeDto, updateEmployeeDto } from '@shared';
+import { Employee, CreateEmployeeDto, updateEmployeeDto, Department } from '@shared';
 import { RpcException } from '@nestjs/microservices';
 @Injectable()
 export class EmployeeService {
-  constructor(@InjectModel(Employee.name) private empModal: Model<Employee>) {}
+  constructor(
+    @InjectModel(Employee.name) private empModal: Model<Employee>,
+    @InjectModel(Department.name) private depModal: Model<Department>
+  ) {}
 
   async createEmployee(body: CreateEmployeeDto) {
     const isExist = await this.empModal.findOne({ email: body.email });
+    const isDepartment = await this.depModal.findById(body.departmentId);
+    if (!isDepartment) {
+      throw new RpcException({
+        status: 404,
+        message: 'Department id is not valid id!',
+      });
+    }
     if (isExist) {
       throw new RpcException({
         status: 404,
@@ -25,7 +35,37 @@ export class EmployeeService {
   }
 
   async getAllEmployee() {
-    return this.empModal.find();
+    return this.empModal.aggregate([
+      {
+        $lookup: {
+          from: 'departments',
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+        },
+      },
+      {
+        $unwind: {
+          path: '$department',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          _id:'$_id',
+          name:'$name',
+          email:'$email',
+          phone:'$phone',
+          department:{
+            _id:'$department._id',
+            name:'$department.name',
+            description:'$department.description',
+          },
+          salary: '$salary',
+          status: '$status',
+        },
+      },
+    ]);
   }
 
   async updateEmployee(id: string, body: updateEmployeeDto) {

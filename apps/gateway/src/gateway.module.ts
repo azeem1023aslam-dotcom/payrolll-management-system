@@ -4,11 +4,13 @@ import {
   AuthGatewayController,
   DepartmentGatewayController,
   EmployeeGatewayController,
+  LeavesGatewayController,
 } from './app/controllers';
 import {
   AuthGatewayService,
   DepartmentGatewayService,
   EmployeeGatewayService,
+  LeavesGatewayService,
 } from './app/services';
 import { AttendanceGatewayController } from './app/controllers/attendance.controller';
 import { AttendanceGatewayService } from './app/services/attendance.service';
@@ -19,9 +21,9 @@ import { AttendanceGatewayService } from './app/services/attendance.service';
     RmqModule.registerMultipleAsync([
       SERVICES.AUTH,
       SERVICES.EMPLOYEE,
-      SERVICES.LEAVES,
       SERVICES.DEPARTMENT,
       SERVICES.ATTENDANCE,
+      SERVICES.LEAVES,
     ]),
   ],
   controllers: [
@@ -29,12 +31,14 @@ import { AttendanceGatewayService } from './app/services/attendance.service';
     EmployeeGatewayController,
     DepartmentGatewayController,
     AttendanceGatewayController,
+    LeavesGatewayController,
   ],
   providers: [
     AuthGatewayService,
     EmployeeGatewayService,
     DepartmentGatewayService,
     AttendanceGatewayService,
+    LeavesGatewayService,
   ],
 })
 export class GatewayModule {}

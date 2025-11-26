@@ -1,4 +1,4 @@
-import { SharedModule } from '@shared';
+import { Department, departmentSchema, SharedModule } from '@shared';
 import { Module } from '@nestjs/common';
 import { EmployeeController } from './app/employee.controller';
 import { EmployeeService } from './app/employee.service';
@@ -13,6 +13,10 @@ import { RmqModule, SERVICES, Employee, employeeSchema } from '@shared';
       {
         name: Employee.name,
         schema: employeeSchema,
+      },
+      {
+        name: Department.name,
+        schema: departmentSchema,
       },
     ]),
   ],

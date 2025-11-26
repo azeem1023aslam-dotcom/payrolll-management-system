@@ -1,0 +1,75 @@
+{
+  "name": "leaves",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/leaves/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/leaves",
+        "main": "apps/leaves/src/main.ts",
+        "tsConfig": "apps/leaves/tsconfig.app.json",
+        "assets": ["apps/leaves/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/leaves/webpack.config.js",
+        "generatePackageJson": false
+      },
+      "configurations": {
+        "development": {
+          "generatePackageJson": false
+        },
+        "production": {
+          "generatePackageJson": true
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/dist/apps/leaves/package.json",
+        "{workspaceRoot}/dist/apps/leaves/pnpm-lock.yaml"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/apps/leaves/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "leaves:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "leaves:build:development"
+        },
+        "production": {
+          "buildTarget": "leaves:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

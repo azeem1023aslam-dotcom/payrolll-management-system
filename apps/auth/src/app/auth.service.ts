@@ -60,7 +60,7 @@ export class AuthService {
       });
     }
     const payload = {
-      id: isRegisteredUser?._id,
+      userId: isRegisteredUser?._id,
       email: isRegisteredUser?.email,
       role: isRegisteredUser?.role,
     };

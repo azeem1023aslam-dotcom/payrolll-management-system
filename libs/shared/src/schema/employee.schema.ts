@@ -9,23 +9,11 @@ export class Employee extends Document {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ enum: ['admin', 'hr', 'employee'], default: 'employee' })
-  role: string;
-
   @Prop()
   phone: string;
 
-  @Prop()
-  address: string;
-
-  // @Prop({ type: mongoose.Types.ObjectId, ref: 'Department' })
-  // department: string;
-
-  // @Prop({ type: mongoose.Types.ObjectId, ref: 'Designation' })
-  // designation: string;
-
-  // @Prop()
-  // joiningDate: Date;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Department' })
+  departmentId: mongoose.Types.ObjectId;
 
   @Prop()
   salary: string;

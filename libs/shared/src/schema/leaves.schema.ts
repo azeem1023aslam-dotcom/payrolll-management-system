@@ -4,10 +4,10 @@ import mongoose from "mongoose";
 @Schema({timestamps:true})
 export class Leave {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Employee' })
-  employee: string;
+  userId: string;
 
   @Prop({ required: true })
-  leaveType: string; // casual, sick, paid
+  leaveType: string;
 
   @Prop()
   fromDate: string;
