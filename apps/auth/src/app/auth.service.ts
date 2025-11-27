@@ -59,6 +59,8 @@ export class AuthService {
         message: 'Email or password is incorrect',
       });
     }
+    console.log(isRegisteredUser,'isRegisteredUser');
+    
     const payload = {
       userId: isRegisteredUser?._id,
       email: isRegisteredUser?.email,

@@ -14,12 +14,24 @@ export class RoleBaseGuardsGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    if (!requiredRoles) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
+
+    // If no roles required, allow access (but still try to attach user if token exists)
+    if (!requiredRoles) {
+      if (authHeader) {
+        try {
+          const token = authHeader.split(' ')[1];
+          const decoded = this.jwtService.verify(token);
+          request.user = {
+            userId: decoded.userId,
+            email: decoded.email,
+            role: decoded.role,
+          };
+        } catch{}
+      }
+      return true;
+    }
 
     if (!authHeader) {
       throw new UnauthorizedException('Jwt token missing!');
@@ -27,6 +39,13 @@ export class RoleBaseGuardsGuard implements CanActivate {
 
     const token = authHeader.split(' ')[1];
     const decoded = this.jwtService.verify(token);
+
+    // Attach user to request object
+    request.user = {
+      userId: decoded.userId,
+      email: decoded.email,
+      role: decoded.role,
+    };
 
     const hasRole = requiredRoles.some((role) => decoded.role === role);
     

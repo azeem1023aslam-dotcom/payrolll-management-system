@@ -8,8 +8,11 @@ import { Model } from 'mongoose';
 export class LeavesService {
   constructor(@InjectModel(Leave.name) private leavesModal: Model<Leave>) {}
 
-  async createLeave(body: any) {
+  async createLeave(body: any, userId: string) {
     try {
+      body.userId = userId;
+      console.log(userId,'userId,userIduserIduserIduserId');
+      
       const leave = await this.leavesModal.create(body);
       return {
         status: 200,
