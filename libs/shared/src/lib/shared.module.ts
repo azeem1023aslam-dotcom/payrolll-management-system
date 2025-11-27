@@ -1,3 +1,7 @@
+import { Department, departmentSchema } from './../schema/department.schema';
+import { Leave, leavesSchema } from './../schema/leaves.schema';
+import { Employee, employeeSchema } from './../schema/employee.schema';
+import { signup, signupSchema } from './../schema/auth.schema';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,6 +18,13 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([
+      {name:signup.name, schema:signupSchema},
+      {name:Employee.name, schema:employeeSchema},
+      {name:Leave.name, schema:leavesSchema},
+      {name:Department.name, schema:departmentSchema}
+    
+    ])
   ],
   exports: [MongooseModule],
 })

@@ -25,7 +25,6 @@ import {
     @IsEnum(['pending','approved','rejected'])
     @ApiProperty({example:'pending', enum:['pending','approved','rejected'],default:'pending'})
     status: string;
-
   }
   
   export class updateLeavesDto extends PartialType(CreateLeavesDto) {}

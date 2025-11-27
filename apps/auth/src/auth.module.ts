@@ -13,12 +13,6 @@ import { SERVICES } from '@shared';
   imports: [
     SharedModule,
     RmqModule.registerMultipleAsync([SERVICES.AUTH]),
-    MongooseModule.forFeature([
-      {
-        name: signup.name,
-        schema: signupSchema,
-      },
-    ]),
     // jwt congiuration
     JwtModule.registerAsync({
       imports: [ConfigModule],

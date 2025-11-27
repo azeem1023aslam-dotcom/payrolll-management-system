@@ -14,12 +14,6 @@ import {
   imports: [
     SharedModule,
     RmqModule.registerMultipleAsync([SERVICES.DEPARTMENT]),
-    MongooseModule.forFeature([
-      {
-        name: Department.name,
-        schema: departmentSchema,
-      },
-    ]),
   ],
   controllers: [DepartmentController],
   providers: [DepartmentService],

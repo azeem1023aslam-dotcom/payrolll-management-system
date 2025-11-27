@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose from "mongoose";
+import { signup } from "./auth.schema";
 
 @Schema({timestamps:true})
 export class Leave {
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'Employee' })
-  userId: string;
+  @Prop({ type: mongoose.Types.ObjectId, ref: 'signup' })
+  userId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   leaveType: string;
