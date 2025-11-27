@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@shared';
 import { EmployeeGatewayService } from '../services/employee.service';
 import { CreateEmployeeDto, updateEmployeeDto } from '@shared';
 
@@ -19,6 +20,7 @@ export class EmployeeGatewayController {
     private readonly employeeGatewayService: EmployeeGatewayService
   ) {}
 
+  @Roles('admin')
   @Post('create-employee')
   createEmployee(@Body() body: CreateEmployeeDto) {
     return this.employeeGatewayService.createEmployee(body);

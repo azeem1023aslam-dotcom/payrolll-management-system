@@ -8,8 +8,6 @@ import { RmqModule } from '../../../libs/shared/src/lib/rmq.module';
 import { signup, signupSchema } from 'libs/shared/src/schema/auth.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { SERVICES } from '@shared';
-import { APP_GUARD } from '@nestjs/core';
-// import { RoleBaseGuardsGuard } from './app/role-based-authorization/roles.guard';
 
 @Module({
   imports: [
@@ -34,13 +32,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
   ],
   controllers: [AuthController],
-  exports:[JwtModule]
-  // providers: [
-  //   AuthService,
-  //   {
-  //     provide: APP_GUARD,
-  //     useClass: RoleBaseGuardsGuard,
-  //   },
-  // ],
+  exports:[JwtModule],
+  providers: [AuthService]
 })
 export class AuthModule {}

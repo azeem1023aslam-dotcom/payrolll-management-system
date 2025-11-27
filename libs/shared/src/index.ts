@@ -3,3 +3,4 @@ export * from './lib/rmq.module';
 export * from './constants';
 export * from './DTO';
 export * from './schema';
+export * from './lib/role-based-authorization';

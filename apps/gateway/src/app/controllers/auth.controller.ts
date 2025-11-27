@@ -6,7 +6,6 @@ import {
   signupDto,
 } from '@shared';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Roles } from './../../../../auth/src/app/role-based-authorization/roles.decorator';
 import { AuthGatewayService } from '../services/auth.service';
 
 @ApiTags('Auth')
@@ -25,7 +24,6 @@ export class AuthGatewayController {
     return this.gatewayService.login(body);
   }
 
-  @Roles('admin')
   @Post('forget-password')
   forgetPassword(@Body() body: forgetPasswordDto) {
     return this.gatewayService.forgetPassword(body);

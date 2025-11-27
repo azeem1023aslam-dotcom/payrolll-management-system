@@ -1,8 +1,6 @@
 import { AuthModule } from './../../auth/src/auth.module';
-import { AuthStrategy } from './../../auth/src/app/role-based-authorization/auth.strategy';
-import { RoleBaseGuardsGuard } from './../../auth/src/app/role-based-authorization/roles.guard';
 import { Module } from '@nestjs/common';
-import { SERVICES, SharedModule, RmqModule } from '@shared';
+import { SERVICES, SharedModule, RmqModule, AuthStrategy, RoleBaseGuardsGuard } from '@shared';
 import {
   AuthGatewayController,
   DepartmentGatewayController,

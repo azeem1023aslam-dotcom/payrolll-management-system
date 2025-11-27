@@ -1,8 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { forgetPasswordDto, loginDto, resetPasswordDto, signupDto } from '@shared';
-import { Roles } from './role-based-authorization/roles.decorator';
+import { forgetPasswordDto, loginDto, resetPasswordDto, signupDto, Roles } from '@shared';
 
 @Controller()
 export class AuthController {
