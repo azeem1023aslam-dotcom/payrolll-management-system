@@ -5,6 +5,7 @@ import { signup, signupSchema } from './../schema/auth.schema';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ActivityLog, activityLogsSchema } from '../schema';
 @Module({
   imports:[
     ConfigModule.forRoot({
@@ -22,7 +23,8 @@ import { MongooseModule } from '@nestjs/mongoose';
       {name:signup.name, schema:signupSchema},
       {name:Employee.name, schema:employeeSchema},
       {name:Leave.name, schema:leavesSchema},
-      {name:Department.name, schema:departmentSchema}
+      {name:Department.name, schema:departmentSchema},
+      {name:ActivityLog.name, schema:activityLogsSchema}
     
     ])
   ],

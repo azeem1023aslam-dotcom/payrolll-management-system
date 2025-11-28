@@ -71,7 +71,12 @@ export class LeavesService {
           status: 1,
           reason: 1,
           userId: 1,
-          userInfo: 1,
+          userInfo: {
+            _id: 1,
+            name: 1,
+            email: 1,
+            phone: 1,
+          },
         },
       },
     ]);
