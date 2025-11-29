@@ -9,8 +9,7 @@ export class ActivityLogsService {
     @InjectModel(ActivityLog.name) private activityLogsModal: Model<ActivityLog>
   ) {}
 
-  async createActivityLog(body: any, userId: string) {
-      body.userId = userId;
+  async createActivityLog(body: any) {
       const activityLog = await this.activityLogsModal.create(body);
       return {
         status: 200,

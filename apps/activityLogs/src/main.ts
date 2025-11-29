@@ -10,7 +10,7 @@ async function bootstrap() {
       transport: Transport.RMQ,
       options: {
         urls: [process.env.RMQ_URI],
-        queue: SERVICES.LEAVES,
+        queue: SERVICES.ACTIVITY_LOGS,
         queueOptions: {
           durable: true
         },

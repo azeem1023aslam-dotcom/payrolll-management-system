@@ -1,18 +1,17 @@
 import { Controller } from '@nestjs/common';
 import { ActivityLogsService } from './activityLogs.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 @Controller()
 export class ActivityLogsController {
   constructor(private readonly activityLogsService: ActivityLogsService) {}
 
-  @MessagePattern('leaves.create')
-  async createLeave(data: any) {
-    const { userId, ...body } = data;
-    return this.activityLogsService.createActivityLog(body, userId);
+  @EventPattern('create_activity_log')
+  async createActivityLog(body: any) {
+    return this.activityLogsService.createActivityLog(body);
   }
 
-  @MessagePattern('leaves.getAll')
-  async getAllLeaves() {
+  @MessagePattern('logs.getAll')
+  async getAllActivityLogs() {
     return this.activityLogsService.getAllActivityLogs();
   }
 

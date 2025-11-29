@@ -3,33 +3,24 @@ import {
     Controller,
     Get,
     Post,
-    Req,
-    UnauthorizedException,
   } from '@nestjs/common';
   import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-  import { CreateLeavesDto, Roles } from '@shared';
-  import { LeavesGatewayService } from '../services/leaves.service';
-  import { Request } from 'express';
-  
-  @ApiTags('Leaves')
+  import { activityLogsDto, SERVICES } from '@shared';
+import { ActivityLogGatewayService } from '../services';
+  @ApiTags('Activity Logs')
   @ApiBearerAuth()
-  @Controller('leaves')
+  @Controller('activityLogs')
+
   export class ActivityLogsGatewayController {
-    constructor(private readonly leavesGatewayService: LeavesGatewayService) {}
+    constructor(private readonly activityGatewayService: ActivityLogGatewayService) {}
   
-    @Post('create-activity-log')
-    createActivityLog(@Body() body: CreateActivityLogDto, @Req() req: Request) {
-      const userId = (req as any).user?.userId;
-      console.log(userId, 'userid');
-      
-      if (!userId) {
-        throw new UnauthorizedException('User not authenticated');
-      }
-      return this.leavesGatewayService.createLeave({ ...body, userId });
+    @Post(SERVICES.ACTIVITY_LOGS)
+    createActivityLog(@Body() body: activityLogsDto) {
+      return this.activityGatewayService.createActivityLog(body);
     }
   
-    @Get('get-all-leaves')
-    getAllLeaves() {
-      return this.leavesGatewayService.getAllLeaves();
+    @Get('get-all-logs')
+    getAllActivityLogs() {
+      return this.activityGatewayService.getAllLogs();
     }
   }  

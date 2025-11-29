@@ -25,6 +25,7 @@ export class RoleBaseGuardsGuard implements CanActivate {
           const decoded = this.jwtService.verify(token);
           request.user = {
             userId: decoded.userId,
+            name:decoded.name,
             email: decoded.email,
             role: decoded.role,
           };
@@ -43,6 +44,7 @@ export class RoleBaseGuardsGuard implements CanActivate {
     // Attach user to request object
     request.user = {
       userId: decoded.userId,
+      name:decoded.name,
       email: decoded.email,
       role: decoded.role,
     };

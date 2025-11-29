@@ -8,6 +8,7 @@ import {
   LeavesGatewayController,
 } from './app/controllers';
 import {
+  ActivityLogGatewayService,
   AuthGatewayService,
   DepartmentGatewayService,
   EmployeeGatewayService,
@@ -16,6 +17,7 @@ import {
 import { AttendanceGatewayController } from './app/controllers/attendance.controller';
 import { AttendanceGatewayService } from './app/services/attendance.service';
 import { APP_GUARD } from '@nestjs/core';
+import { ActivityLogsGatewayController } from './app/controllers/activityLogs.controller';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { APP_GUARD } from '@nestjs/core';
       SERVICES.DEPARTMENT,
       SERVICES.ATTENDANCE,
       SERVICES.LEAVES,
+      SERVICES.ACTIVITY_LOGS
     ]),
   ],
   controllers: [
@@ -35,6 +38,7 @@ import { APP_GUARD } from '@nestjs/core';
     DepartmentGatewayController,
     AttendanceGatewayController,
     LeavesGatewayController,
+    ActivityLogsGatewayController
   ],
   providers: [
     AuthStrategy,
@@ -47,6 +51,7 @@ import { APP_GUARD } from '@nestjs/core';
     DepartmentGatewayService,
     AttendanceGatewayService,
     LeavesGatewayService,
+    ActivityLogGatewayService
   ],
 })
 export class GatewayModule {}

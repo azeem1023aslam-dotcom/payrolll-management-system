@@ -59,10 +59,10 @@ export class AuthService {
         message: 'Email or password is incorrect',
       });
     }
-    console.log(isRegisteredUser,'isRegisteredUser');
     
     const payload = {
       userId: isRegisteredUser?._id,
+      name:isRegisteredUser.name,
       email: isRegisteredUser?.email,
       role: isRegisteredUser?.role,
     };
@@ -88,7 +88,7 @@ export class AuthService {
       });
     }
     const token = this.jwtService.sign(
-      { email: isRegisteredUser?.email, userId: isRegisteredUser?._id },
+      { email: isRegisteredUser?.email, name:isRegisteredUser.name, userId: isRegisteredUser?._id },
       {
         secret: process.env.JWT_SECRET,
         expiresIn: '5m',

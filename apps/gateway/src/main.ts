@@ -1,11 +1,14 @@
+import { ActivityLogInterceptor } from './../../../libs/shared/src/interceptors/activityLogs.interceptors';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { GatewayModule } from './gateway.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { RoleBaseGuardsGuard, SERVICES } from '@shared';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
+  // app.useGlobalGuards(new RoleBaseGuardsGuard(app.get(Reflector)));
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
@@ -14,6 +17,14 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
     })
+  );
+
+  const activityClient = app.get(SERVICES.ACTIVITY_LOGS);
+
+  const reflector = app.get(Reflector);
+
+  app.useGlobalInterceptors(
+    new ActivityLogInterceptor(reflector, activityClient)
   );
 
   const swaggerOptions = new DocumentBuilder()

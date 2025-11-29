@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 @Schema({timestamps:true})
 export class ActivityLog extends Document {
@@ -8,15 +8,9 @@ export class ActivityLog extends Document {
   
     @Prop({ required: true })
     action: string;
-  
+    
     @Prop()
-    targetId: string;
-  
-    @Prop()
-    targetModel: string;
-  
-    @Prop()
-    description: string;
+    message: string;
   }
   
 

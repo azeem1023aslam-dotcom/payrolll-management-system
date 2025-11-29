@@ -13,7 +13,11 @@ export class AuthStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: any) {
-    return { userId: payload.userId, email: payload.email, role: payload.role };
+    return {
+      userId: payload.userId,
+      name: payload.name,
+      email: payload.email,
+      role: payload.role,
+    };
   }
 }
-
