@@ -13,8 +13,8 @@ export class EmployeeController {
   }
 
   @MessagePattern('employee.get')
-  async getAllEmployee() {
-    return this.empService.getAllEmployee();
+  async getAllEmployee(query:any) {
+    return this.empService.getAllEmployee(query);
   }
 
   @MessagePattern('employee.delete')

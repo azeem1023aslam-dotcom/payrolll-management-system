@@ -4,6 +4,7 @@ import {
   IsMongoId,
   IsOptional,
   IsNumber,
+  IsArray,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
@@ -23,10 +24,10 @@ export class CreateEmployeeDto {
   @ApiProperty({example:'03040000000'})
   phone?: string;
 
-  @IsOptional()
-  @IsMongoId()
-  @ApiProperty({example:new mongoose.Types.ObjectId()})
-  departmentId?: mongoose.Types.ObjectId;
+  @IsArray()
+  @IsMongoId({each:true})
+  @ApiProperty({example: [new mongoose.Types.ObjectId().toHexString()] })
+  departmentId?: string[];
 
   @IsOptional()
   @Type(() => Number)

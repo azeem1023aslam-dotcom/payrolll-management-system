@@ -9,7 +9,7 @@ import {
   } from '@nestjs/common';
   import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DepartmentGatewayService } from '../services/department.service';
-import { CreateDepartmentDto, updateDepartmentDto } from '@shared';
+import { CreateDepartmentDto, LogActivity, updateDepartmentDto } from '@shared';
   
   @ApiTags('Department')
   @ApiBearerAuth()
@@ -19,6 +19,7 @@ import { CreateDepartmentDto, updateDepartmentDto } from '@shared';
       private readonly departmentGatewayService: DepartmentGatewayService
     ) {}
   
+    @LogActivity('create department')
     @Post('create-department')
     createDepartment(@Body() body: CreateDepartmentDto) {
       return this.departmentGatewayService.createDepartment(body);
@@ -29,11 +30,13 @@ import { CreateDepartmentDto, updateDepartmentDto } from '@shared';
       return this.departmentGatewayService.getAllDepartment();
     }
   
+  @LogActivity('department updated')
     @Patch(':id')
     updateDepartment(@Param('id') id: string, @Body() body: updateDepartmentDto) {
       return this.departmentGatewayService.updateDepartment(id, body);
     }
   
+  @LogActivity('department delete')
     @Delete(':id')
     deleteDepartment(@Param('id') id: string) {
       return this.departmentGatewayService.deleteDepartment(id);

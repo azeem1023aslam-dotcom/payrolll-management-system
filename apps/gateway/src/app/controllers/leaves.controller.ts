@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateLeavesDto, Roles } from '@shared';
+import { CreateLeavesDto, LogActivity, Roles } from '@shared';
 import { LeavesGatewayService } from '../services/leaves.service';
 import { Request } from 'express';
 
@@ -18,6 +18,7 @@ export class LeavesGatewayController {
   constructor(private readonly leavesGatewayService: LeavesGatewayService) {}
 
   @Roles('employee')
+  @LogActivity('apply leave')
   @Post('create-leave')
   createLeave(@Body() body: CreateLeavesDto, @Req() req: Request) {
     const userId = (req as any).user?.userId;

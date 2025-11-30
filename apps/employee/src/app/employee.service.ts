@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Employee, CreateEmployeeDto, updateEmployeeDto, Department } from '@shared';
+import mongoose, { Model } from 'mongoose';
+import {
+  Employee,
+  CreateEmployeeDto,
+  updateEmployeeDto,
+  Department,
+} from '@shared';
 import { RpcException } from '@nestjs/microservices';
+import { pipe } from 'rxjs';
 @Injectable()
 export class EmployeeService {
   constructor(
@@ -20,20 +26,20 @@ export class EmployeeService {
     }
 
     const isValidDept = await this.depModal.aggregate([
-      {$match:{_id:body.departmentId}},
-      {$limit:1}
-    ])
+      { $match: { _id: body.departmentId } },
+      { $limit: 1 },
+    ]);
 
     if (!isValidDept) {
-        throw new RpcException({
-            status: 404,
-            message: 'Department id is not valid id!',
-        });
+      throw new RpcException({
+        status: 404,
+        message: 'Department id is not valid id!',
+      });
     }
     const newEmployee = await this.empModal.create(body);
     const newEmp = await this.empModal.aggregate([
       {
-        $match: { _id: newEmployee._id } 
+        $match: { _id: newEmployee._id },
       },
       {
         $lookup: {
@@ -46,11 +52,11 @@ export class EmployeeService {
       {
         $unwind: {
           path: '$department',
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
-    ])
-    
+    ]);
+
     return {
       staus: 202,
       message: 'Employee create successfully',
@@ -58,38 +64,106 @@ export class EmployeeService {
     };
   }
 
-  async getAllEmployee() {
-    return this.empModal.aggregate([
-      {
-        $lookup: {
-          from: 'departments',
-          localField: 'departmentId',
-          foreignField: '_id',
-          as: 'department',
+  // get all employees
+
+  async getAllEmployee(query: any) {
+    const { page, limit, search, department } = query;
+    const skip = (page - 1) * limit;
+
+    let pipeline = [];
+
+    // 1️⃣ Lookup departments
+    pipeline.push({
+      $lookup: {
+        from: 'departments',
+        localField: 'departmentId',
+        foreignField: '_id',
+        as: 'department',
+      },
+    });
+
+    
+    //search
+    if (search) {
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              name: { $regex: search, $options: 'i' },
+            },
+          ],
+        },
+      });
+    }
+
+    // 2️⃣ Match by single departmentId if provided
+    if (department) {
+      const departmentIds = Array.isArray(department) ? department : [department];
+
+      pipeline.push({
+        $match: {
+          departmentId: {
+            $elemMatch: { $in: departmentIds.map(id => new mongoose.Types.ObjectId(id)) },
+          },
+        },
+      });
+    }
+
+    // Project fields
+    pipeline.push({
+      $project: {
+        _id: 1,
+        name: 1,
+        email: 1,
+        phone: 1,
+        salary: 1,
+        status: 1,
+        department: {
+          $map: {
+            input: '$department',
+            as: 'd',
+            in: {
+              _id: '$$d._id',
+              name: '$$d.name',
+              description: '$$d.description',
+            },
+          },
         },
       },
+    });
+
+    // pagination
+    pipeline.push(
       {
-        $unwind: {
-          path: '$department',
-          preserveNullAndEmptyArrays: true
-        }
+        $facet: {
+          data: [
+            { $sort: { createdAt: -1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+          totalCount: [{ $count: 'count' }],
+        },
       },
       {
         $project: {
-          _id:'$_id',
-          name:'$name',
-          email:'$email',
-          phone:'$phone',
-          department:{
-            _id:'$department._id',
-            name:'$department.name',
-            description:'$department.description',
-          },
-          salary: '$salary',
-          status: '$status',
+          data: 1,
+          total: { $ifNull: [{ $arrayElemAt: ['$totalCount.count', 0] }, 0] },
         },
+      }
+    );
+
+    const result = await this.empModal.aggregate(pipeline);
+    const { data, total } = result[0];
+
+    return {
+      data: data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-    ]);
+    };
   }
 
   async updateEmployee(id: string, body: updateEmployeeDto) {

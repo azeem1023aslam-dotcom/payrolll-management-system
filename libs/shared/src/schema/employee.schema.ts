@@ -12,11 +12,11 @@ export class Employee extends Document {
   @Prop()
   phone: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Department' })
-  departmentId: mongoose.Types.ObjectId;
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Department' })
+  departmentId: mongoose.Types.ObjectId[];
 
   @Prop()
-  salary: string;
+  salary: number;
 
   @Prop({ default: true })
   status: boolean;

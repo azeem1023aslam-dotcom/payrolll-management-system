@@ -20,10 +20,10 @@ export class EmployeeGatewayService {
     }
   }
 
-  async getAllEmployee() {
+  async getAllEmployee(query:any) {
     try {
       const result = await firstValueFrom(
-        this.employeeClient.send('employee.get', {})
+        this.employeeClient.send('employee.get', query)
       );
       return result;
     } catch (error) {
