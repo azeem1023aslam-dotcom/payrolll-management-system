@@ -6,3 +6,4 @@ export * from './attendance.scham';
 export * from './payroll.schema';
 export * from './leaves.schema';
 export * from './activityLogs.schema';
+export * from './payroll.schema';

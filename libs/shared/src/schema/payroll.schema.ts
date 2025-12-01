@@ -1,34 +1,37 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Payroll {
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'Employee' })
-  employee: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Employee', required: true })
+  employeeId: string;
 
-  @Prop()
+  @Prop({ required: true })
   month: string;
 
-  @Prop()
+  @Prop({ required: true })
+  basicSalary: number;
+
+  @Prop({ required: true })
   totalDays: number;
 
-  @Prop()
+  @Prop({ required: true })
   presentDays: number;
 
-  @Prop()
-  absentDays: number;
+  @Prop({ required: true })
+  paidLeaves: number;
 
-  @Prop()
-  leaveDays: number;
+  @Prop({ required: true })
+  unpaidLeaves: number;
 
-  @Prop()
-  overtimeHours: number;
+  @Prop({ required: true })
+  unpaidAmount: number;
 
-  @Prop()
-  grossSalary: number;
+  @Prop({ required: true })
+  netSalary: number;
 
-  @Prop()
-  status: 'paid' | 'unpaid';
+  @Prop({ required: true })
+  status: string;
 }
 
-export const payrollSchema = SchemaFactory.createForClass(Payroll)
+export const payrollSchema = SchemaFactory.createForClass(Payroll);

@@ -10,14 +10,9 @@ import { ActivityLogGatewayService } from '../services';
 
   export class ActivityLogsGatewayController {
     constructor(private readonly activityGatewayService: ActivityLogGatewayService) {}
-  
-    // @Post(SERVICES.ACTIVITY_LOGS)
-    // createActivityLog(@Body() body: activityLogsDto) {
-    //   return this.activityGatewayService.createActivityLog(body);
-    // }
-  
+
     @Get('get-all-logs')
     getAllActivityLogs() {
       return this.activityGatewayService.getAllLogs();
     }
-  }  
+  }

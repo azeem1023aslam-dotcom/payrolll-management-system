@@ -1,0 +1,75 @@
+{
+  "name": "payroll",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/payroll/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/payroll",
+        "main": "apps/payroll/src/main.ts",
+        "tsConfig": "apps/payroll/tsconfig.app.json",
+        "assets": ["apps/payroll/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/payroll/webpack.config.js",
+        "generatePackageJson": false
+      },
+      "configurations": {
+        "development": {
+          "generatePackageJson": false
+        },
+        "production": {
+          "generatePackageJson": true
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/dist/apps/payroll/package.json",
+        "{workspaceRoot}/dist/apps/payroll/pnpm-lock.yaml"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/apps/payroll/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "payroll:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "payroll:build:development"
+        },
+        "production": {
+          "buildTarget": "payroll:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

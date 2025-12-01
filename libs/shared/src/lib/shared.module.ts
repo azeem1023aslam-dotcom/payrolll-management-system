@@ -5,7 +5,7 @@ import { signup, signupSchema } from './../schema/auth.schema';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ActivityLog, activityLogsSchema } from '../schema';
+import { ActivityLog, activityLogsSchema, Payroll, payrollSchema } from '../schema';
 @Module({
   imports:[
     ConfigModule.forRoot({
@@ -24,8 +24,8 @@ import { ActivityLog, activityLogsSchema } from '../schema';
       {name:Employee.name, schema:employeeSchema},
       {name:Leave.name, schema:leavesSchema},
       {name:Department.name, schema:departmentSchema},
-      {name:ActivityLog.name, schema:activityLogsSchema}
-    
+      {name:ActivityLog.name, schema:activityLogsSchema},
+      {name:Payroll.name, schema:payrollSchema}
     ])
   ],
   exports: [MongooseModule],
