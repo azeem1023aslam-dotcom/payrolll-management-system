@@ -26,4 +26,9 @@ export class EmployeeController {
   async updateEmpById(data: { id: string; body: updateEmployeeDto }) {
     return this.empService.updateEmployee(data.id, data.body);
   }
+
+  @MessagePattern('employee.profile')
+  async getEmployeeProfile(userId:any) {
+    return this.empService.getEmployeeProfile(userId);
+  }
 }

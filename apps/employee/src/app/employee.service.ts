@@ -82,7 +82,6 @@ export class EmployeeService {
       },
     });
 
-    
     //search
     if (search) {
       pipeline.push({
@@ -98,12 +97,16 @@ export class EmployeeService {
 
     // 2️⃣ Match by single departmentId if provided
     if (department) {
-      const departmentIds = Array.isArray(department) ? department : [department];
+      const departmentIds = Array.isArray(department)
+        ? department
+        : [department];
 
       pipeline.push({
         $match: {
           departmentId: {
-            $elemMatch: { $in: departmentIds.map(id => new mongoose.Types.ObjectId(id)) },
+            $elemMatch: {
+              $in: departmentIds.map((id) => new mongoose.Types.ObjectId(id)),
+            },
           },
         },
       });
@@ -200,6 +203,14 @@ export class EmployeeService {
     return {
       message: 'Employee deleted successfully',
       data: emp,
+    };
+  }
+
+  async getEmployeeProfile(userId: any) {
+    const result = await this.empModal.find({ _id: userId });
+    return {
+      message: 'successully',
+      data: result,
     };
   }
 }

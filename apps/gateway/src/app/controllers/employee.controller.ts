@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { LogActivity, Roles } from '@shared';
@@ -64,5 +65,10 @@ export class EmployeeGatewayController {
   @Delete(':id')
   deleteEmployee(@Param('id') id: string) {
     return this.employeeGatewayService.deleteEmployee(id);
+  }
+  
+  @Get('profile')
+  getEmployeeProfile(@Req() req:any) {
+    return this.employeeGatewayService.getEmployeeProfile(req?.user?.userId);
   }
 }

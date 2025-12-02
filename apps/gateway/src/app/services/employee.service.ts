@@ -20,7 +20,7 @@ export class EmployeeGatewayService {
     }
   }
 
-  async getAllEmployee(query:any) {
+  async getAllEmployee(query: any) {
     try {
       const result = await firstValueFrom(
         this.employeeClient.send('employee.get', query)
@@ -34,10 +34,10 @@ export class EmployeeGatewayService {
     }
   }
 
-  async updateEmployee(id:string,body:updateEmployeeDto) {
+  async updateEmployee(id: string, body: updateEmployeeDto) {
     try {
       const result = await firstValueFrom(
-        this.employeeClient.send('employee.update', {id,body})
+        this.employeeClient.send('employee.update', { id, body })
       );
       return result;
     } catch (error) {
@@ -48,10 +48,24 @@ export class EmployeeGatewayService {
     }
   }
 
-  async deleteEmployee(id:string) {
+  async deleteEmployee(id: string) {
     try {
       const result = await firstValueFrom(
         this.employeeClient.send('employee.delete', id)
+      );
+      return result;
+    } catch (error) {
+      return {
+        status: 'error',
+        message: error.message || 'Internal server error',
+      };
+    }
+  }
+
+  async getEmployeeProfile(id: string) {
+    try {
+      const result = await firstValueFrom(
+        this.employeeClient.send('employee.profile', id)
       );
       return result;
     } catch (error) {
