@@ -30,7 +30,7 @@ async function bootstrap() {
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Payroll System Gateway API')
     .setDescription('Payroll System Gateway API documentation')
-    .setVersion('1.0')
+    // .setVersion('1.0')
     .addBearerAuth()
     .build();
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
-import { Leave, signup } from '@shared';
+import { Leave, signup, updateLeavesDto, updateLeavesStatusDto } from '@shared';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class LeavesService {
   async createLeave(body: any, userId: string) {
     try {
       body.userId = userId;
+      body.status = 'pending';
       const leave = await this.leavesModal.create(body);
       return {
         status: 200,
@@ -31,22 +33,22 @@ export class LeavesService {
     const leaves = await this.leavesModal.aggregate([
       {
         $addFields: {
-          userIdObject: { 
+          userIdObject: {
             $convert: {
               input: '$userId',
               to: 'objectId',
-              onError: null,   // Agar conversion fail ho (bool ya invalid string ho), toh null set karein
-              onNull: null     // Agar userId null ho, toh null set karein
-            }
-          }
-        }
+              onError: null, // Agar conversion fail ho (bool ya invalid string ho), toh null set karein
+              onNull: null, // Agar userId null ho, toh null set karein
+            },
+          },
+        },
       },
-      
+
       // Filter out documents jinka userIdObject null hai (invalid data)
       {
-        $match: { userIdObject: { $ne: null } }
+        $match: { userIdObject: { $ne: null } },
       },
-      
+
       // $lookup mein ab ObjectId ka use karein
       {
         $lookup: {
@@ -84,6 +86,48 @@ export class LeavesService {
       status: 200,
       message: 'Leaves fetched successfully',
       data: leaves,
+    };
+  }
+
+  async updateLeave(id: string, body: updateLeavesDto) {
+    const leave = await this.leavesModal.findByIdAndUpdate(id, body, {
+      new: true,
+    });
+    if (!leave) {
+      throw new RpcException({
+        status: 404,
+        message: 'Leave not found',
+      });
+    }
+    return {
+      status: 200,
+      message: 'Leave updated successfully',
+      data: leave,
+    };
+  }
+
+  async updateLeaveStatusById(id: string, body: updateLeavesStatusDto) {
+    const leave = await this.leavesModal.findByIdAndUpdate(id, body, {
+      new: true,
+    });
+    if (!leave) {
+      throw new RpcException({
+        status: 404,
+        message: 'Leave not found',
+      });
+    }
+    return {
+      status: 200,
+      message: 'Leave status updated successfully',
+      data: leave,
+    };
+  }
+
+  async leavesHistory(userId: any) {
+    const result = await this.leavesModal.find({ userId: userId });
+    return {
+      message: 'successfully',
+      data: result,
     };
   }
 }

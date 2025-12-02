@@ -4,6 +4,11 @@ import {
   } from 'class-validator';
   import { ApiProperty, PartialType } from '@nestjs/swagger';
   
+  export enum LeaveStatus {
+    APPROVED = 'approved',
+    REJECTED = 'rejected'
+  }
+
   export class CreateLeavesDto {
 
     @IsString()
@@ -21,10 +26,18 @@ import {
     @IsString()
     @ApiProperty({example:'I am sick'})
     reason: string;
-
-    @IsEnum(['pending','approved','rejected'])
-    @ApiProperty({example:'pending', enum:['pending','approved','rejected'],default:'pending'})
-    status: string;
   }
   
   export class updateLeavesDto extends PartialType(CreateLeavesDto) {}
+
+  export class updateLeavesStatusDto {
+    @IsEnum(LeaveStatus)
+    @ApiProperty({
+      // example: LeaveStatus.APPROVED,
+      enum: LeaveStatus,
+      enumName: 'LeaveStatus',
+      // default: LeaveStatus.APPROVED,
+      description: 'Leave status'
+    })
+    status: LeaveStatus;
+  }

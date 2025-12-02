@@ -7,7 +7,6 @@ import {
   Patch,
   Post,
   Query,
-  Search,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { LogActivity, Roles } from '@shared';
